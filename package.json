@@ -1,0 +1,21 @@
+{
+    "name": "tokener",
+    "version": "1.0.0",
+    "description": "generate and verify signed tokens with expiration dates",
+    "main": "index.js",
+    "files": ["index.js", "lib/Tokener.js"],
+    "scripts": {
+        "pretest": "./node_modules/.bin/coffee -c lib/Tokener.coffee",
+        "test": "./node_modules/.bin/mocha test.js"
+    },
+    "devDependencies": {
+        "coffee-script": "^1.10.0",
+        "mocha": "^2.3.3",
+        "should": "^7.1.0"
+    },
+    "dependencies": {
+        "moment": "^2.10.6"
+    },
+    "author": "Ruquay K Calloway",
+    "license": "MIT"
+}
