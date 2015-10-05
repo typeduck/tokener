@@ -1,6 +1,6 @@
 {
     "name": "tokener",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "generate and verify signed tokens with expiration dates",
     "main": "index.js",
     "files": ["index.js", "lib/Tokener.js"],
@@ -15,6 +15,10 @@
     },
     "dependencies": {
         "moment": "^2.10.6"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/typeduck/tokener"
     },
     "author": "Ruquay K Calloway",
     "license": "MIT"
