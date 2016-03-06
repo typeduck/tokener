@@ -10,12 +10,15 @@ describe("Tokener", function(){
     });
 
     it("should allow another algorithm", function(){
-        var signer = tokener("foobar", {algorithm: "sha256"});
+        var signer = tokener("foobar");
+        var signer2 = tokener("foobar", {algorithm: "sha256"});
         var orig = "a:b:c";
         var signed = signer.create(orig);
-        // make sure we used correct algorithm
-        /[0-9a-f]{64}$/.test(signed).should.be.true();
+        var signed2 = signer2.create(orig);
+        // they should not equal each other, but both be correct
+        signed.should.not.equal(signed2)
         signer.verify(signed).should.equal(orig);
+        signer2.verify(signed2).should.equal(orig);
     });
 
     it("should allow Error-throwing mode", function(){

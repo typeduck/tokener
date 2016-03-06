@@ -1,6 +1,6 @@
 {
     "name": "tokener",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "generate and verify signed tokens with expiration dates",
     "main": "index.js",
     "files": ["index.js", "lib/Tokener.js"],
@@ -10,11 +10,11 @@
     },
     "devDependencies": {
         "coffee-script": "^1.10.0",
-        "mocha": "^2.3.3",
-        "should": "^7.1.0"
+        "mocha": "^2.4.5",
+        "should": "^8.2.2"
     },
     "dependencies": {
-        "moment": "^2.10.6"
+        "moment": "^2.11.2"
     },
     "repository": {
         "type": "git",

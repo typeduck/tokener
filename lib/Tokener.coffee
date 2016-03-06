@@ -4,7 +4,7 @@
 
 crypto = require "crypto"
 Moment = require("moment")
-DF = "YYYY-MM-DD[T]HH.mm.ss.SSS[Z]"
+DF = "YYYYMMDD[T]HHmmss.SSS[Z]"
 
 # Export only the class
 module.exports = class Tokener
@@ -16,12 +16,15 @@ module.exports = class Tokener
       throw new Error("Signing key must be string or Buffer")
     # Set up raw signing method, getters
     algo = opts?.algorithm || "sha1"
-    sign = (s) -> crypto.createHmac(algo, secret).update(s).digest("hex")
+    sign = (s) ->
+      sig = crypto.createHmac(algo, secret).update(s).digest().toString('base64')
+      sig.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
     Object.defineProperty(@, "sign", {get: () -> sign})
     Object.defineProperty(@, "msValid", {get: () -> opts?.msValid || 86400000})
     # Create a sample to determine proper length, parse method
-    len = @sign("example").length
-    rxValid = new RegExp("^(.*):([^:]+):([0-9a-f]{#{len}})$")
+    lenSig = @sign("example").length
+    lenDate = Moment().format(DF).length
+    rxValid = new RegExp("^(.*)\.(.{#{lenDate}})\.(.{#{lenSig}})$")
     Object.defineProperty(@, "tokenMatcher", {get: () -> rxValid})
     # throwOnError option rewrites verify() call
     if opts?.throwOnError
@@ -34,9 +37,9 @@ module.exports = class Tokener
   # Token generation
   create: (toSign) ->
     expires = Moment.utc().add(@msValid, "ms").format(DF)
-    data = "#{toSign}:#{expires}"
+    data = "#{toSign}.#{expires}"
     sig = @sign(data)
-    return "#{data}:#{sig}"
+    return "#{data}.#{sig}"
 
   # Token verification, returns original string, or Error
   verify: (token) ->
@@ -53,6 +56,6 @@ module.exports = class Tokener
     if not mm.isAfter(Moment())
       return new Error("Expired Token")
     # Then, check signature
-    data = "#{orig}:#{expires}"
+    data = "#{orig}.#{expires}"
     sigOK = @sign(data)
     if sig is sigOK then orig else new Error("Bad Token Signature")
